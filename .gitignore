@@ -1,0 +1,6 @@
+# user files
+.DS_Store
+**/archive
+
+# R History files
+.Rhistory
