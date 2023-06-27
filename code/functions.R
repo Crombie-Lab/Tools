@@ -49,3 +49,34 @@ makeDesign <- function(n.plate, n.row, n.col, assay.name = NULL, assay.type = NU
   # out
   return(design)
 }
+
+# get the genetic distance between two points in the genome
+geneticDistance <- function(left, right, chrom) {
+  # message
+  message("getting C. elegans genetic map from https://github.com/AndersenLab/post-gatk-nf/raw/main/input_files/annotations/c_elegans/c_elegans_genetic_map.bed.gz")
+  # get bed
+  bed_data <- data.table::fread("https://github.com/AndersenLab/post-gatk-nf/raw/main/input_files/annotations/c_elegans/c_elegans_genetic_map.bed.gz") %>%
+    dplyr::select(CHROM = V1, Start = V2, End = V3, cM = V4)
+  
+  # get cM distance between our markers
+  dist1 <- bed_data %>%
+    dplyr::filter(CHROM == chrom) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(bin.median = median(c(Start, End))) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(left1.dist = abs(left - bin.median),
+                  right1.dist = abs(right - bin.median))
+  
+  l1cM <- dist1 %>%
+    dplyr::arrange(left1.dist) %>%
+    dplyr::slice(1)
+  
+  r1cM <- dist1 %>%
+    dplyr::arrange(right1.dist) %>%
+    dplyr::slice(1)
+  
+  gen.dist1 <- r1cM$cM - l1cM$cM
+  # return it
+  message(glue::glue("The genetic distance between {chrom}:{left} and {chrom}:{right} is {gen.dist1}"))
+  return(gen.dist1)
+}
