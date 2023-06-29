@@ -95,7 +95,7 @@ recombinantProb <- function(n.wells, n.recombinants, g.dist){
   prob <- choose(n.wells, n.recombinants) * r.freq^n.recombinants * (1-r.freq)^(n.wells-n.recombinants)
   
   # Print the result
-  message(glue::glue("The probability of getting {k} recombinants in {n} wells given a genetic distance between markers of {g.dist} cM is: {prob}"))
+  message(glue::glue("The probability of getting {n.recombinants} recombinants in {n.wells} wells given a genetic distance between markers of {g.dist} cM is: {prob}"))
   
   # return the result to for assignment
   return(prob)
