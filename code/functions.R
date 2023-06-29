@@ -51,6 +51,7 @@ makeDesign <- function(n.plate, n.row, n.col, assay.name = NULL, assay.type = NU
 }
 
 # get the genetic distance between two points in the genome
+# could make species specific with another parameter.
 geneticDistance <- function(left, right, chrom) {
   # message
   message("getting C. elegans genetic map from https://github.com/AndersenLab/post-gatk-nf/raw/main/input_files/annotations/c_elegans/c_elegans_genetic_map.bed.gz")
@@ -79,4 +80,23 @@ geneticDistance <- function(left, right, chrom) {
   # return it
   message(glue::glue("The genetic distance between {chrom}:{left} and {chrom}:{right} is {gen.dist1}"))
   return(gen.dist1)
+}
+
+# test the probability of observing n recombinants
+# n.wells is the number of F2 wells in your cross
+# n.recombinants is the number of recombinants observed across n wells
+# g.dist is the genetic distance in cM between genetic markers
+recombinantProb <- function(n.wells, n.recombinants, g.dist){
+  
+  # convert to prob from genetic dist
+  r.freq <- g.dist/100
+  
+  # Calculate the binomial probability
+  prob <- choose(n.wells, n.recombinants) * r.freq^n.recombinants * (1-r.freq)^(n.wells-n.recombinants)
+  
+  # Print the result
+  message(glue::glue("The probability of getting {k} recombinants in {n} wells given a genetic distance between markers of {g.dist} cM is: {prob}"))
+  
+  # return the result to for assignment
+  return(prob)
 }
