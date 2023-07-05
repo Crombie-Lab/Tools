@@ -78,7 +78,7 @@ geneticDistance <- function(left, right, chrom) {
   
   gen.dist1 <- r1cM$cM - l1cM$cM
   # return it
-  message(glue::glue("The genetic distance between {chrom}:{left} and {chrom}:{right} is {gen.dist1}"))
+  message(glue::glue("The genetic distance between {chrom}:{left} and {chrom}:{right} is {gen.dist1} cM"))
   return(gen.dist1)
 }
 
