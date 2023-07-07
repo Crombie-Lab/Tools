@@ -1,4 +1,10 @@
 library(tidyverse)
+library(easyXpress)
+library(rebus)
+library(data.table)
+library(png)
+library(cowplot)
+library(gridExtra)
 
 # Function to make design file for HTA
 # USAGE:
@@ -102,13 +108,6 @@ recombinantProb <- function(n.wells, n.recombinants, g.dist){
   return(prob)
 }
 
-library(tidyverse)
-library(easyXpress)
-library(rebus)
-library(data.table)
-library(png)
-library(cowplot)
-library(gridExtra)
 
 #' viewOverlay
 #'
