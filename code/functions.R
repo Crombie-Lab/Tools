@@ -452,3 +452,30 @@ viewObjects <- function(data, proc.img.dir, out.dir, file.names, cols, prompt = 
   }
   
 }
+
+
+# Pull CaeNDR wild isolate data
+getWI <- function(color = c("red", "black", "blue")){
+  # read C. briggsae sp sheet
+  #cb <- googlesheets4::read_sheet("1IJHMLwuaxS_sEO31TyK5NLxPX7_qSd0bHNKverAv8-0", col_types = "cccccdcddccccdddccccDccdccll")
+  cb <- gsheet::gsheet2tbl(url = "https://docs.google.com/spreadsheets/d/1IJHMLwuaxS_sEO31TyK5NLxPX7_qSd0bHNKverAv8-0")
+  
+  #ce <- googlesheets4::read_sheet("10x-CcKNCl80F9hMcrGWC4fhP_cbekSzi5_IYBY2UqCc", col_types = "cccccdcddccccdddccccDccdcclllll") # what is the 29th column>
+  ce <- gsheet::gsheet2tbl(url = "https://docs.google.com/spreadsheets/d/10x-CcKNCl80F9hMcrGWC4fhP_cbekSzi5_IYBY2UqCc")
+  
+  #ct <- googlesheets4::read_sheet("1mqXOlUX7UeiPBe8jfAwFZnqlzhb7X-eKGK_TydT7Gx4", col_types = "cccccdcddccccdddccccDccdccll")
+  ct <- gsheet::gsheet2tbl(url = "https://docs.google.com/spreadsheets/d/1mqXOlUX7UeiPBe8jfAwFZnqlzhb7X-eKGK_TydT7Gx4")
+  
+  # bind 'em
+  dat <- cb %>%
+    dplyr::bind_rows(ce) %>%
+    dplyr::bind_rows(ct) %>%
+    dplyr::mutate(color = case_when(species == "Caenorhabditis elegans" ~ color[1],
+                                    species == "Caenorhabditis tropicalis" ~ color[2],
+                                    species == "Caenorhabditis briggsae" ~ color[3])) %>%
+    dplyr::mutate(species = factor(species, levels = c("Caenorhabditis elegans", "Caenorhabditis tropicalis", "Caenorhabditis briggsae"))) %>%
+    dplyr::arrange(desc(species))
+  
+  return(dat)
+}
+
